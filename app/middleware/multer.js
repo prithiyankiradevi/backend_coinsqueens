@@ -20,7 +20,7 @@ const storage=multer.diskStorage ({
         cb(null,'/home/fbnode/uploads/coinQueens1')
     },
     filename:(req,file,cb)=>{
-        cb(null,Date.now().toString() + file.originalname)
+        cb(null, file.originalname)
     },
 
 })       

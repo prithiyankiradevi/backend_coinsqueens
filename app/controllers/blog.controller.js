@@ -1,6 +1,6 @@
+const paginated=require('../middleware/pagination')
 const blogController = require('../model/blog.model')
 const jwt = require('jsonwebtoken')
-const { artifactregistry_v1beta1 } = require('googleapis')
 
 const createBlog = (req, res) => {
     console.log(req.headers.authorization)
@@ -28,11 +28,12 @@ const getBlogById = (req, res) => {
 }
 
 const getAllBlog = (req, res) => {
-    blogController.blogSchema.find({ deleteFlag: false }, (err, data) => {
+    console.log('line 31 inside get all ')
+     blogController.blogSchema.find({ deleteFlag: false },(err, data)  =>{
         if (err) { throw err }
         else {
-            console.log(data)
-            res.status(200).send({ data: data })
+            // const a=paginated.paginated(data,req,res)
+            res.status(200).send({ data: data})
         }
     })
 }

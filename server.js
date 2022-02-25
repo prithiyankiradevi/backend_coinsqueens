@@ -12,7 +12,6 @@ app.use(express.json()); /* bodyParser.json() is deprecated */
 app.use(express.urlencoded({ extended: true })); /* bodyParser.urlencoded() is deprecated */
 app.use(cors())
 
-app.use('/uploads',express.static('/home/fbnode/uploads/coinQueens1'))
 
 // app.use('/uploads',express.static('/home/fbnode/uploads/coinQueens1'))
 
@@ -26,6 +25,9 @@ app.use('/uploads',express.static('/home/fbnode/uploads/coinQueens1'))
 app.use('/admin',api)
 app.use('/admin',regAndImage)
 app.use('/user',user)
+
+app.use('/uploads',express.static('/home/fbnode/uploads/coinQueens1'))
+
 // parse requests of content-type - application/json
 // app.use(bodyParser)
 // parse requests of content-type - application/x-www-form-urlencoded
