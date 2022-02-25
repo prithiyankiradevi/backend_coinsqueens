@@ -3,7 +3,7 @@ const userController=require('../controllers/user_controller')
 const blogController=require('../controllers/blog.controller')
 
 router.get('/getById/:id',userController.getById)
-router.get('/getAllBlog',userController.getAllBlog)
+router.get('/getAllBlog',userController.getAllUserBlog)
 router.get('/getAllCategory',userController.getAllCategory)
 //
 router.get('/getAllIp',userController.getIpAddress)

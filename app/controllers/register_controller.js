@@ -67,56 +67,68 @@ const adminLogin = (req, res) => {
 };
 
 const createBlogImage = (req, res) => {
-  console.log("line no 70", req.body);
-  if (req.body.blogImage) {
-    const token = jwt.decode(req.headers.authorization);
-    req.body.userName = token.userName;
-    console.log(req.file.filename);
-    req.body.blogImage = `http://192.168.0.112:8099/uploads/${req.file.filename}`;
-  } else {
-    req.body.uploadFiles = `http://192.168.0.112:8099/uploads/${req.file.filename}`;
-  }
-  register.blogImage.create(req.body, (err, data) => {
-    console.log(data);
-    if (err) {
-      throw err;
+  try{
+    console.log("line no 70", req.body);
+    if (req.body.blogImage) {
+      const token = jwt.decode(req.headers.authorization);
+      req.body.userName = token.userName;
+      console.log(req.file.filename);
+      req.body.blogImage = `http://192.168.0.112:8099/uploads/${req.file.filename}`;
     } else {
-      console.log("inside else");
-      res.status(200).send(data);
+      req.body.uploadFiles = `http://192.168.0.112:8099/uploads/${req.file.filename}`;
     }
-  });
+    register.blogImage.create(req.body, (err, data) => {
+      console.log(data);
+      if (err) {
+        throw err;
+      } else {
+        console.log("inside else");
+        res.status(200).send(data);
+      }
+    });
+  }catch(e){
+    res.status(500).send('internal server error')
+  }
 };
 
 const createUploadFiles = (req, res) => {
-  req.body.UploadFiles = `http://192.168.0.112:8099/uploads/${req.file.filename}`;
-  register.uploadFiles.create(req.body, (err, data) => {
-    console.log(data);
-    if (err) {
-      throw err;
-    } else {
-      console.log("inside else");
-      res.status(200).send(data.UploadFiles);
-    }
-  });
+  try{
+    req.body.UploadFiles = `http://192.168.0.112:8099/uploads/${req.file.filename}`;
+    register.uploadFiles.create(req.body, (err, data) => {
+      console.log(data);
+      if (err) {
+        throw err;
+      } else {
+        console.log("inside else");
+        res.status(200).send(data.UploadFiles);
+      }
+    });
+  }catch(e){
+    res.status(500).send('internal server error')
+  }
 };
 
 const createIpAddress = (req, res) => {
-  register.ipAddress.countDocuments(
-    { ipAddress: req.body.ipAddress },
-    (err, data) => {
-      if (err) {
-        res.status(400).send({ message: "already exists" });
-      } else {
-        register.ipAddress.create(req.body, (err, data) => {
-          if (err) {
-            throw err;
-          } else {
-            res.status(200).send({ message: "successfull" });
-          }
-        });
+  try{
+    register.ipAddress.countDocuments(
+      { ipAddress: req.body.ipAddress },
+      (err, data) => {
+        if (err) {
+          res.status(400).send({ message: "already exists" });
+        } else {
+          register.ipAddress.create(req.body, (err, data) => {
+            if (err) {
+              throw err;
+            } else {
+              res.status(200).send({ message: "successfull" });
+            }
+          });
+        }
       }
-    }
-  );
+    );
+  }catch(e){
+    res.status(500).send('internal server error')
+  }
 };
 
 module.exports = {

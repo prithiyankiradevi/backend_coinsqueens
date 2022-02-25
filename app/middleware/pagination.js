@@ -1,8 +1,9 @@
-function paginated(model, req, res) {
+const math=require('math')
+function paginated(model, limits,req, res) {
   // return async(req,res,next) => {
   console.log(typeof model);
   const page = parseInt(req.query.page);
-  const limit = parseInt(req.query.limit);
+  const limit = limits
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
   const result = {};
@@ -18,6 +19,8 @@ function paginated(model, req, res) {
       limit: limit,
     };
   }
+  console.log(model.length)
+  result.totalPages=math.ceil(model.length/limit)
 console.log(result)
   // result.result = await model.find().limit(limit).skip(startIndex).exec()
   result.result= model.slice(startIndex,endIndex)
