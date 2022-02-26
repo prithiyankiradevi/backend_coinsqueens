@@ -36,34 +36,37 @@ const getBlogById = (req, res) => {
 }
 
 const getAllBlog = (req, res) => {
+    const token = jwt.decode(req.headers.authorization)
     try{
         console.log('line 31 inside get all ')
-        blogController.blogSchema.find({ deleteFlag: false },(err, data)  =>{
-           if (err) { throw err }
-           else {
-               // const a=paginated.paginated(data,req,res)
-               res.status(200).send({ data: data})
-           }
-       })
+        if(token.userName != undefined){
+            blogController.blogSchema.find({ deleteFlag: false,userName:token.userName },(err, data)  =>{
+                if (err) { throw err }
+                else {
+                    res.status(200).send({ data: data})
+                }
+            })
+        }
+        else {
+            res.status(400).send('UnAuthorized')
+        }
     }catch(e){
         res.status(500).send('internal server error')
     }
 }
 
 const updateBlogById = (req, res) => {
+    const token = jwt.decode(req.headers.authorization)
     try{
         blogController.blogSchema.findByIdAndUpdate(req.params.id, req.body, { new: true }, (err, result) => {
             if (result) {
-                const token = jwt.decode(req.headers.authorization)
                 const userName = token.userName
                 if (userName == result.userName) {
-                    console.log(result)
                     req.body.blogId = result._id
                     req.body.updatedAt = Date.now()
                     blogController.updateBlog.create(req.body, (err, data) => {
                         if (err) { throw err }
                         else {
-                            console.log('updated 1st time')
                             res.status(200).send({ message: '1st time updated successfully', data })
                         }
                     })
@@ -82,9 +85,7 @@ const getRecentCreate = (req, res) => {
         blogController.blogSchema.find({ deleteFlag: 'false' }, (err, data) => {
             if (err) { throw err }
             else {
-                // console.log('line 67',data)
                 const z = data.slice(-4)
-                console.log('line 69', z)
                 res.status(200).send({ data: data })
             }
         })
@@ -118,11 +119,9 @@ const getRecentUpdate = (req, res) => {
 
 const deleteBlogById = (req, res) => {
     try{
-        console.log(req.params.id)
         blogController.blogSchema.findByIdAndUpdate(req.params.id, { deleteFlag: "true" }, { returnOriginal: false }, (err, data) => {
             if (err) { throw err }
             else {
-                console.log(data)
                 res.status(200).send({ message: 'data deleted successfully' })
             }
         })
@@ -142,12 +141,10 @@ const createCategory = (req, res) => {
                 blogController.categorySchema.create(req.body, (err, data) => {
                     if (err) { throw err }
                     else {
-                        console.log(data)
                         res.status(200).send({ data: data })
                     }
                 })
             } else {
-                console.log('category already exists')
                 res.status(400).send({ message: 'category already exists' })
             }
         })
@@ -160,19 +157,14 @@ const getCategoryByName = (req, res) => {
     try{
         const arr=[]
         blogController.categorySchema.find({ category: req.params.categoryName, deleteFlag: false }, (err, data) => {
-            console.log('line 124', data)
             if (err) { console.log(err) }
             else {
                 const z = data[0].category
-                console.log(z)
                 blogController.blogSchema.find({}, async (err, data) => {
                     if (data) {
-                        console.log(data.length)
                         for (var i = 0; i < data.length; i++) {
                             for (var j = 0; j < data[i].category.length; j++) {
                                 if (data[i].category[j] == z) {
-                                    console.log('true');
-                                    console.log(data[i])
                                     arr.push(data[i])
                                 }
                             }
@@ -189,11 +181,11 @@ const getCategoryByName = (req, res) => {
 }
 
 const getAllCategory = (req, res) => {
+    const token = jwt.decode(req.headers.authorization)
     try{
-        blogController.categorySchema.find({ deleteFlag: false }, (err, data) => {
+        blogController.categorySchema.find({ deleteFlag: false,userName:token.username }, (err, data) => {
             if (err) { throw err }
             else {
-                console.log(data)
                 res.status(200).send({ data: data })
             }
         })
@@ -224,11 +216,9 @@ const updateCategory = (req, res) => {
 
 const deleteCategory = (req, res) => {
     try{
-        console.log(req.params.id)
         blogController.blogSchema.findByIdAndUpdate(req.params.id, { deleteFlag: "true" }, { returnOriginal: false }, (err, data) => {
             if (err) { throw err }
             else {
-                console.log(data)
                 res.status(200).send({ message: 'data deleted successfully', data })
             }
         })

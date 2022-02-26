@@ -7,6 +7,8 @@ router.get('/getAllBlog',userController.getAllUserBlog)
 router.get('/getAllCategory',userController.getAllCategory)
 //
 router.get('/getAllIp',userController.getIpAddress)
+router.get('/textSearch',userController.textSearch)
+
 
 
 
