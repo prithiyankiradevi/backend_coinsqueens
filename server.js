@@ -15,7 +15,7 @@ app.use(cors())
 
 // app.use('/uploads',express.static('/home/fbnode/uploads/coinQueens1'))
 
-// var corsOptions = {
+// var corsOptions = {s
 //   origin: "https://coinsqueens.com",
 //   optionsSuccessStatus: 200, // For legacy browser support
 //   methods: "GET, PUT"

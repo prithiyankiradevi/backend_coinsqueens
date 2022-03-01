@@ -17,6 +17,7 @@ const blogSchemas = mongoose.Schema({
     },
     category: [String],
     tags: [String],
+    ip:[String],
     pageUrl: String,
     createdAt: {
         type: String,

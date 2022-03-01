@@ -10,7 +10,6 @@ router.get('/blog/getAll',blogController.getAllBlog)
 router.put('/blog/update/:id',blogController.updateBlogById)
 router.delete('/blog/delete/:id',blogController.deleteBlogById)
 
-
 //categtory
 router.post('/category/create',blogController.createCategory)
 router.get('/category/getAll',blogController.getAllCategory)

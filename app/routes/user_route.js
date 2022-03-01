@@ -6,11 +6,11 @@ router.get('/getById/:id',userController.getById)
 router.get('/getAllBlog',userController.getAllUserBlog)
 router.get('/getAllCategory',userController.getAllCategory)
 //
-router.get('/getAllIp',userController.getIpAddress)
+
 router.get('/textSearch',userController.textSearch)
-
-
-
+router.post('/ip',userController.createIp)
+router.get('/getAllIp',userController.getIpAddress)
+router.post('/blog/getByUrl',userController.getBlogUrl)
 
 
 router.get('/blog/getRecentUpdate/:blogId',blogController.getRecentUpdate)

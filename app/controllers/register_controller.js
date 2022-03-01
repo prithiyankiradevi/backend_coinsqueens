@@ -42,8 +42,8 @@ const adminLogin = (req, res) => {
               userName: data.userName,
             };
             const token = await jwt.sign(payload, process.env.SECRET_KEY);
-            const id=data._id
-            res.status(200).send({ role: data.role, token});
+            const id = data._id;
+            res.status(200).send({ role: data.role, token });
           } else {
             res.status(400).send("invalid ");
           }
@@ -60,7 +60,7 @@ const adminLogin = (req, res) => {
 };
 
 const createBlogImage = (req, res) => {
-  try{
+  try {
     if (req.body.blogImage) {
       const token = jwt.decode(req.headers.authorization);
       req.body.userName = token.userName;
@@ -75,13 +75,13 @@ const createBlogImage = (req, res) => {
         res.status(200).send(data);
       }
     });
-  }catch(e){
-    res.status(500).send('internal server error')
+  } catch (e) {
+    res.status(500).send("internal server error");
   }
 };
 
 const createUploadFiles = (req, res) => {
-  try{
+  try {
     req.body.UploadFiles = `http://192.168.0.112:8099/uploads/${req.file.filename}`;
     register.uploadFiles.create(req.body, (err, data) => {
       if (err) {
@@ -90,31 +90,8 @@ const createUploadFiles = (req, res) => {
         res.status(200).send(data.UploadFiles);
       }
     });
-  }catch(e){
-    res.status(500).send('internal server error')
-  }
-};
-
-const createIpAddress = (req, res) => {
-  try{
-    register.ipAddress.countDocuments(
-      { ipAddress: req.body.ipAddress },
-      (err, data) => {
-        if (err) {
-          res.status(400).send({ message: "already exists" });
-        } else {
-          register.ipAddress.create(req.body, (err, data) => {
-            if (err) {
-              throw err;
-            } else {
-              res.status(200).send({ message: "successfull" });
-            }
-          });
-        }
-      }
-    );
-  }catch(e){
-    res.status(500).send('internal server error')
+  } catch (e) {
+    res.status(500).send("internal server error");
   }
 };
 
@@ -122,6 +99,5 @@ module.exports = {
   create,
   adminLogin,
   createBlogImage,
-  createIpAddress,
   createUploadFiles,
 };

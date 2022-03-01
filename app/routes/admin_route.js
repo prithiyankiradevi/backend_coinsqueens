@@ -6,7 +6,6 @@ const { uploadFiles } = require('../model/register_model')
 // admin
 router.post('/create',registerController.create)
 router.post('/login',registerController.adminLogin)
-router.post('/ip/create',registerController.createIpAddress)
 
 
 

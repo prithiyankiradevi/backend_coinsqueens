@@ -48,23 +48,27 @@ async function pagination(model, limits, req, res, calledFrom) {
     };
   }
 
-  await textSearchQuery(model, limit, req, calledFrom, startIndex, result);
-
-  
+  await textSearchQuery(model, limit, req, calledFrom, startIndex,endIndex, result);
+  console.log('line 52',result)
   res.status(200).send(result);
 }
 
-async function textSearchQuery(model, limit, req, calledFrom, startIndex, result){
+
+
+async function textSearchQuery(model, limit, req, calledFrom, startIndex,endIndex, result){
   const z = await model.find(
     { deleteFlag: "false" }
-  ).limit(limit).skip(startIndex)
+  )
+  // .limit(limit).skip(startIndex)
   const emptyarr = [];
-
+console.log('line 64',z)
+if(z==undefined||null){
+  return ;
+}else{
   for (var i = 0; i < z.length; i++) {
 
-    if (z[i].blogTitle.toLowerCase().includes(req.query.search.toLowerCase())) {
+    if (z[i].blogTitle?.toLowerCase().includes(req.query.search.toLowerCase())) {
       emptyarr.push(z[i]);
-
     }else{
       for (var j=0;j<z[i].tags.length;j++){
         if((z[i].tags[j].toLowerCase()).includes(req.query.search.toLowerCase())){
@@ -73,10 +77,13 @@ async function textSearchQuery(model, limit, req, calledFrom, startIndex, result
       }
     }
   }
+}
+ 
   result.total_no_od_data=emptyarr.length
   result.total_pages = Math.ceil(emptyarr.length/ limit);
 
-  result.allDatas=emptyarr
+  // .limit(limit).skip(startIndex)
+  result.allDatas=emptyarr.slice(startIndex,endIndex)
 
 
 
