@@ -11,6 +11,7 @@ require('./app/db.config/db.config')
 app.use(express.json()); /* bodyParser.json() is deprecated */
 app.use(express.urlencoded({ extended: true })); /* bodyParser.urlencoded() is deprecated */
 app.use(cors())
+const bcrypt = require("bcrypt");
 
 
 // app.use('/uploads',express.static('/home/fbnode/uploads/coinQueens1'))
@@ -25,6 +26,14 @@ app.use(cors())
 app.use('/admin',api)
 app.use('/admin',regAndImage)
 app.use('/user',user)
+app.get('',(req,res)=>{
+  res.status(200).send('welcome Coinsqueens')
+})
+
+app.get('/hashpassword/:id',(req,res)=>{
+  const password = bcrypt.hashSync(req.params.id, 10);
+  res.status(200).send(password);
+})
 
 app.use('/uploads',express.static('/home/fbnode/uploads/coinQueens1'))
 

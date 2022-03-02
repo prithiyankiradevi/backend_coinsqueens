@@ -1,9 +1,8 @@
 const res = require("express/lib/response");
-const blogController=require('../controllers/blog.controller')
+const blogController = require("../controllers/blog.controller");
 const math = require("math");
 
 function paginated(model, limits, req, res) {
-  
   const page = parseInt(req.query.page);
   const limit = limits;
   const startIndex = (page - 1) * limit;
@@ -28,13 +27,13 @@ function paginated(model, limits, req, res) {
 
 async function pagination(model, limits, req, res, calledFrom) {
   var k = await model.countDocuments().exec();
-  
+
   const page = parseInt(req.query.page);
   const limit = limits;
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
   const result = {};
-  
+
   if (endIndex < k) {
     result.next = {
       page: page + 1,
@@ -48,49 +47,54 @@ async function pagination(model, limits, req, res, calledFrom) {
     };
   }
 
-  await textSearchQuery(model, limit, req, calledFrom, startIndex,endIndex, result);
-  console.log('line 52',result)
+  await textSearchQuery(
+    model,
+    limit,
+    req,
+    calledFrom,
+    startIndex,
+    endIndex,
+    result
+  );
   res.status(200).send(result);
 }
 
-
-
-async function textSearchQuery(model, limit, req, calledFrom, startIndex,endIndex, result){
-  const z = await model.find(
-    { deleteFlag: "false" }
-  )
-  // .limit(limit).skip(startIndex)
+async function textSearchQuery(
+  model,
+  limit,
+  req,
+  calledFrom,
+  startIndex,
+  endIndex,
+  result
+) {
+  const z = await model.find({ deleteFlag: "false" });
   const emptyarr = [];
-console.log('line 64',z)
-if(z==undefined||null){
-  return ;
-}else{
-  for (var i = 0; i < z.length; i++) {
-
-    if (z[i].blogTitle?.toLowerCase().includes(req.query.search.toLowerCase())) {
-      emptyarr.push(z[i]);
-    }else{
-      for (var j=0;j<z[i].tags.length;j++){
-        if((z[i].tags[j].toLowerCase()).includes(req.query.search.toLowerCase())){
-          emptyarr.push(z[i])
+  if (z == undefined || null) {
+    return;
+  } else {
+    for (var i = 0; i < z.length; i++) {
+      if (
+        z[i].blogTitle?.toLowerCase().includes(req.query.search.toLowerCase())
+      ) {
+        emptyarr.push(z[i]);
+      } else {
+        for (var j = 0; j < z[i].tags.length; j++) {
+          if (
+            z[i].tags[j].toLowerCase().includes(req.query.search.toLowerCase())
+          ) {
+            emptyarr.push(z[i]);
+          }
         }
       }
     }
   }
+
+  result.total_no_od_data = emptyarr.length;
+  result.total_pages = Math.ceil(emptyarr.length / limit);
+
+  result.allDatas = emptyarr.slice(startIndex, endIndex);
 }
- 
-  result.total_no_od_data=emptyarr.length
-  result.total_pages = Math.ceil(emptyarr.length/ limit);
-
-  // .limit(limit).skip(startIndex)
-  result.allDatas=emptyarr.slice(startIndex,endIndex)
-
-
-
-}
-
- 
-
 
 module.exports = {
   paginated,

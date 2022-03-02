@@ -7,9 +7,12 @@ const create = (req, res) => {
     register.admin.countDocuments(
       { userName: req.body.userName },
       async (err, num) => {
-        if (num == 0) {
+        console.log(num)
+        if (num===0) {
           req.body.password = await bcrypt.hashSync(req.body.password, 10);
+          // req.body.userName = await bcrypt.hashSync(req.body.userName, 10);
           register.admin.create(req.body, (err, data) => {
+            console.log(data);
             if (err) {
               res.status(400).send({ message: err });
             } else {
@@ -28,15 +31,14 @@ const create = (req, res) => {
 
 const adminLogin = (req, res) => {
   try {
-    register.admin.findOne(
-      { userName: req.body.userName },
-      async (err, data) => {
-        if (data) {
-          const password = await bcrypt.compare(
+    register.admin.findOne({userName:req.body.userName}, async (err, data) => {
+      console.log(data)
+      if (data) {
+        const password = await bcrypt.compare(
             req.body.password,
             data.password
           );
-          if (password === true) {
+        if (password==true) {
             const payload = {
               id: data._id,
               userName: data.userName,
@@ -44,16 +46,15 @@ const adminLogin = (req, res) => {
             const token = await jwt.sign(payload, process.env.SECRET_KEY);
             const id = data._id;
             res.status(200).send({ role: data.role, token });
-          } else {
-            res.status(400).send("invalid ");
-          }
         } else {
-          res.status(400).send({
-            message: "invalid username/password ",
-          });
+          res.status(400).send({ message: "invalid password" });
         }
+      } else {
+        res.status(400).send({
+          message: "invalid username/password ",error:err.message
+        });
       }
-    );
+    });
   } catch (err) {
     res.status(500).send({ message: "internal server error" });
   }

@@ -27,7 +27,7 @@ const getAllUserBlog = (req, res) => {
       if (data) {
         const arr = [];
         for (var i = 0; i < data.length; i++) {
-          if (data[i].publish == "publish") {
+          if (data[i].publish === "publish") {
             arr.push(data[i]);
           }
         }
@@ -130,7 +130,6 @@ const getBlogUrl = (req, res) => {
 };
 
 const textSearch = async (req, res) => {
-  console.log(req.query);
 
   pagination.pagination(
     blogController.blogSchema,

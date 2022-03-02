@@ -4,16 +4,12 @@ const jwt = require("jsonwebtoken");
 
 const createBlog = async (req, res) => {
   try {
-    console.log(req.headers.authorization);
     const token = jwt.decode(req.headers.authorization);
     req.body.userName = token.userName;
-    console.log(token);
     blogController.blogSchema.create(req.body, (err, data) => {
-      console.log(data);
       if (err) {
         throw err;
       } else {
-        console.log(data);
         res.status(200).send({ data: data });
       }
     });
@@ -50,6 +46,7 @@ const getAllBlog = (req, res) => {
           if (err) {
             throw err;
           } else {
+            data.sort().reverse();
             res.status(200).send({ data: data });
           }
         }
@@ -111,8 +108,7 @@ const getRecentCreate = (req, res) => {
 const getRecentUpdate = (req, res) => {
   try {
     blogController.updateBlog.find(
-      { BlogId: req.params.blogId },
-      { deleteFlag: "false" },
+      { BlogId: req.params.blogId ,deleteFlag: "false" },
       (err, data) => {
         if (data) {
           function getFields(input, field) {
@@ -159,8 +155,8 @@ const createCategory = (req, res) => {
       { category: req.body.category },
       (err, data) => {
         if (data == 0) {
-          const token = jwt.decode(req.headers.authorization);
-          req.body.userName = token.userName;
+          // const token = jwt.decode(req.headers.authorization);
+          // req.body.userName = token.userName;
           blogController.categorySchema.create(req.body, (err, data) => {
             if (err) {
               throw err;
@@ -169,7 +165,7 @@ const createCategory = (req, res) => {
             }
           });
         } else {
-          res.status(400).send({ message: "category already exists" });
+          res.status(400).send({ message: "category already exists" ,error:err.message});
         }
       }
     );
@@ -188,20 +184,24 @@ const getCategoryByName = (req, res) => {
           throw err;
         } else {
           const z = data.category;
-          blogController.blogSchema.find({}, async (err, data) => {
-            if (data) {
-              for (var i = 0; i < data.length; i++) {
-                for (var j = 0; j < data[i].category.length; j++) {
-                  if (data[i].category[j] == z) {
-                    arr.push(data[i]);
+          blogController.blogSchema.find(
+            {},
+            { category: 1 },
+            async (err, result) => {
+              if (result) {
+                for (var i = 0; i < result.length; i++) {
+                  for (var j = 0; j < result[i].category.length; j++) {
+                    if (result[i].category[j] == z) {
+                      arr.push(result[i]);
+                    }
                   }
                 }
+                res.status(200).send(arr);
+              } else {
+                res.status(400).send({ message: "data not found" });
               }
-              res.status(200).send(arr);
-            } else {
-              res.status(400).send({ message: "data not found" });
             }
-          });
+          );
         }
       }
     );
@@ -263,7 +263,7 @@ const deleteCategory = (req, res) => {
         if (err) {
           throw err;
         } else {
-          res.status(200).send({ message: "data deleted successfully", data });
+          res.status(200).send({ message: "data deleted successfully" });
         }
       }
     );
