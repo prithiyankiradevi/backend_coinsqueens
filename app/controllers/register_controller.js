@@ -39,15 +39,15 @@ const adminLogin = (req, res) => {
             data.password
           );
         if (password==true) {
-            const payload = {
-              // id: data._id,
-              userName: data.userName
-            };
-            const token = await jwt.sign(payload, process.env.SECRET_KEY);
+            // const payload = {
+            //   // id: data._id,
+            //   userName: data.userName
+            // };
+            // const token = await jwt.sign(payload, process.env.SECRET_KEY);
             const id = data._id;
-            res.status(200).send({ role: data.role, token });
+            res.status(200).send({ role: data.role,token:data.userName });
         } else {
-          res.status(400).send({ message: "invalid password",error:err.me });
+          res.status(400).send({ message: "invalid password",error:err.message});
         }
       } else {
         res.status(400).send({
@@ -63,8 +63,8 @@ const adminLogin = (req, res) => {
 const createBlogImage = (req, res) => {
   try {
     if (req.body.blogImage) {
-      const token = jwt.decode(req.headers.authorization);
-      req.body.userName = token.userName;
+      const token = req.headers.authorization;
+      req.body.userName = token;
       req.body.blogImage = `http://192.168.0.112:8099/uploads/${req.file.filename}`;
     } else {
       req.body.uploadFiles = `http://192.168.0.112:8099/uploads/${req.file.filename}`;
