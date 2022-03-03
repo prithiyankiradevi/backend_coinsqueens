@@ -192,12 +192,11 @@ const getCategoryByName = (req, res) => {
           const z = data.category;
           blogController.blogSchema.find(
             {},
-            { category: 1 },
             async (err, result) => {
               if (result) {
                 for (var i = 0; i < result.length; i++) {
                   for (var j = 0; j < result[i].category.length; j++) {
-                    if (result[i].category[j] == z) {
+                    if (result[i].category[j] == z && result[i].publish=='publish') {
                       arr.push(result[i]);
                     }
                   }
