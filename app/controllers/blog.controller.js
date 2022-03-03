@@ -41,7 +41,7 @@ const getAllBlog = (req, res) => {
   try {
     if (token != undefined) {
       blogController.blogSchema.find(
-        { deleteFlag: false, userName: token.userName },
+        { deleteFlag: false, userName: token },
         (err, data) => {
           if (err) {
             throw err;
@@ -93,10 +93,16 @@ const updateBlogById = async (req, res) => {
 const getRecentCreate = (req, res) => {
   try {
     blogController.blogSchema.find({ deleteFlag: "false" }, (err, data) => {
+      const emptyarr=[]
       if (err) {
         throw err;
       } else {
-        const z = data.slice(-4);
+        for (var i = 0; i < data.length; i++) {
+          if (data[i].publish == "publish") {
+            emptyarr.push(data[i]);
+          }
+        }
+        const z = emptyarr.slice(-4);
         res.status(200).send({ data: z });
       }
     });

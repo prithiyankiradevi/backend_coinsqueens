@@ -70,6 +70,7 @@ async function textSearchQuery(
 ) {
   const z = await model.find({ deleteFlag: "false" });
   const emptyarr = [];
+  const emptyArr1 = [];
   if (z == undefined || null) {
     return;
   } else {
@@ -89,11 +90,15 @@ async function textSearchQuery(
       }
     }
   }
-
+  for (var i = 0; i < emptyarr.length; i++) {
+    if (emptyarr[i].publish == "publish") {
+      emptyArr1.push(emptyarr[i]);
+    }
+  }
   result.total_no_od_data = emptyarr.length;
-  result.total_pages = Math.ceil(emptyarr.length / limit);
+  result.total_pages = Math.ceil(emptyArr1.length / limit);
 
-  result.allDatas = emptyarr.slice(startIndex, endIndex);
+  result.allDatas = emptyArr1.slice(startIndex, endIndex);
 }
 
 module.exports = {

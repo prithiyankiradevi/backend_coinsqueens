@@ -66,7 +66,7 @@ const createIp = async (req, res) => {
           { _id: req.body.id, deleteFlag: "false" },
           (err, data) => {
             if (data.ip.includes(req.body.ipAddress)) {
-              res.status(400).send({ message: "ip already exists" });
+              res.status(200).send({ message: "ip already exists" });
             } else {
               data["ip"].push(req.body.ipAddress);
               blogController.blogSchema.findByIdAndUpdate(
