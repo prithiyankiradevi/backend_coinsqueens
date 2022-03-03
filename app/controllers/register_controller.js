@@ -40,14 +40,14 @@ const adminLogin = (req, res) => {
           );
         if (password==true) {
             const payload = {
-              id: data._id,
-              userName: data.userName,
+              // id: data._id,
+              userName: data.userName
             };
             const token = await jwt.sign(payload, process.env.SECRET_KEY);
             const id = data._id;
             res.status(200).send({ role: data.role, token });
         } else {
-          res.status(400).send({ message: "invalid password" });
+          res.status(400).send({ message: "invalid password",error:err.me });
         }
       } else {
         res.status(400).send({
