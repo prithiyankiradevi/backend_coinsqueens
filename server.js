@@ -8,6 +8,11 @@ const api=require('./app/routes/blog.route')
 const regAndImage=require('./app/routes/admin_route')
 const user=require('./app/routes/user_route')
 require('./app/db.config/db.config')
+
+// var corsOptions = {
+//   origin: 'http://example.com',
+//   optionsSuccessStatus: 200 
+// }
 app.use(express.json()); /* bodyParser.json() is deprecated */
 app.use(express.urlencoded({ extended: true })); /* bodyParser.urlencoded() is deprecated */
 app.use(cors())
