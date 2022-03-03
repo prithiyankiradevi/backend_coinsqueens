@@ -4,8 +4,8 @@ const jwt = require("jsonwebtoken");
 
 const createBlog = async (req, res) => {
   try {
-    const token = jwt.decode(req.headers.authorization);
-    req.body.userName = token.userName;
+    const token = req.headers.authorization
+    req.body.userName = token;
     blogController.blogSchema.create(req.body, (err, data) => {
       if (err) {
         throw err;
@@ -37,9 +37,9 @@ const getBlogById = (req, res) => {
 };
 
 const getAllBlog = (req, res) => {
-  const token = jwt.decode(req.headers.authorization);
+  const token = req.headers.authorization
   try {
-    if (token.userName != undefined) {
+    if (token != undefined) {
       blogController.blogSchema.find(
         { deleteFlag: false, userName: token.userName },
         (err, data) => {
@@ -60,7 +60,7 @@ const getAllBlog = (req, res) => {
 };
 
 const updateBlogById = async (req, res) => {
-  const token = jwt.decode(req.headers.authorization);
+  const token = req.headers.authorization
   try {
     blogController.blogSchema.findByIdAndUpdate(
       { _id: req.params.id },
@@ -68,7 +68,7 @@ const updateBlogById = async (req, res) => {
       { new: true },
       (err, result) => {
         if (result) {
-          const userName = token.userName;
+          const userName = token;
           if (userName == result.userName) {
             req.body.blogId = result._id;
             req.body.updatedAt = Date.now();
@@ -155,8 +155,8 @@ const createCategory = (req, res) => {
       { category: req.body.category },
       (err, data) => {
         if (data == 0) {
-          // const token = jwt.decode(req.headers.authorization);
-          // req.body.userName = token.userName;
+          const token = req.headers.authorization
+          req.body.userName = token;
           blogController.categorySchema.create(req.body, (err, data) => {
             if (err) {
               throw err;
@@ -211,10 +211,10 @@ const getCategoryByName = (req, res) => {
 };
 
 const getAllCategory = (req, res) => {
-  const token = jwt.decode(req.headers.authorization);
+  const token = req.headers.authorization
   try {
     blogController.categorySchema.find(
-      { deleteFlag: false, userName: token.userName },
+      { deleteFlag: false, userName: token},
       (err, data) => {
         if (err) {
           throw err;
@@ -230,8 +230,8 @@ const getAllCategory = (req, res) => {
 
 const updateCategory = (req, res) => {
   try {
-    const token = jwt.decode(req.headers.authorization);
-    const userName = token.userName;
+    const token =req.headers.authorization
+    const userName = token;
     if (userName) {
       blogController.categorySchema.findByIdAndUpdate(
         req.params.id,

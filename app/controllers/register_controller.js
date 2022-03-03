@@ -39,11 +39,6 @@ const adminLogin = (req, res) => {
             data.password
           );
         if (password==true) {
-            // const payload = {
-            //   // id: data._id,
-            //   userName: data.userName
-            // };
-            // const token = await jwt.sign(payload, process.env.SECRET_KEY);
             const id = data._id;
             res.status(200).send({ role: data.role,token:data.userName });
         } else {
