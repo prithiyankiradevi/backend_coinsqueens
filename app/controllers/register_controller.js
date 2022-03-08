@@ -59,8 +59,7 @@ const adminLogin = (req, res) => {
 const createBlogImage = (req, res) => {
   const token = req.headers.authorization;
 
-  // try {
-    // return res.status(200).send(req.file);
+  try {
     if (req.file && token) {
       req.body.userName = token;
       req.body.blogImage = `https://nodejs-new-coins.herokuapp.com/uploads/${req.file.filename}`;
@@ -74,9 +73,9 @@ const createBlogImage = (req, res) => {
     } else {
       res.status(302).send({ message: "please insert image/token" });
     }
-  // } catch (e) {
-  //   res.status(500).send("internal server error");
-  // }
+  } catch (e) {
+    res.status(500).send("internal server error");
+  }
 };
 
 const createUploadFiles = (req, res) => {
