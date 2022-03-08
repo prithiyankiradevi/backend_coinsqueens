@@ -60,7 +60,7 @@ const createBlogImage = (req, res) => {
   const token = req.headers.authorization;
 
   // try {
-
+    return res.status(200).send(req.file);
     if (req.file && token) {
       req.body.userName = token;
       // req.body.blogImage = `http://192.168.0.112:8099/uploads/${req.file.filename}`;
