@@ -57,9 +57,11 @@ const adminLogin = (req, res) => {
 };
 
 const createBlogImage = (req, res) => {
+  const token = req.headers.authorization;
+
   try {
-    if (req.file && req.headers.authorization) {
-      const token = req.headers.authorization;
+
+    if (req.file && token) {
       req.body.userName = token;
       req.body.blogImage = `http://192.168.0.112:8099/uploads/${req.file.filename}`;
       register.blogImage.create(req.body, (err, data) => {
