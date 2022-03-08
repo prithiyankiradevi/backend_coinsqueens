@@ -83,7 +83,7 @@ const createUploadFiles = (req, res) => {
   // try {
     if (req.file && req.headers.authorization) {
       // req.body.UploadFiles = `http://192.168.0.112:8099/uploads/$req.file.filename}`;
-      req.body.blogImage = `https://nodejs-new-coins.herokuapp.com/uploads/${req.file.filename}`;
+      req.body.UploadFiles = `https://nodejs-new-coins.herokuapp.com/uploads/${req.file.filename}`;
 
       register.uploadFiles.create(req.body, (err, data) => {
         if (err) {
