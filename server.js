@@ -40,7 +40,7 @@ app.get('/hashpassword/:id',(req,res)=>{
   res.status(200).send(password);
 })
 
-app.use('/uploads',express.static('/home/fbnode/uploads/coinQueens1'))
+app.use('/uploads',express.static('uploads'))
 
 // parse requests of content-type - application/json
 // app.use(bodyParser)

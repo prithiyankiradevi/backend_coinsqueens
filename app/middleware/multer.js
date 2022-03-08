@@ -2,21 +2,23 @@ const multer=require('multer')
 const fs=require('fs')
 
 const storage=multer.diskStorage ({
-    destination:(req,res,cb)=>{
-         var k = fs.existsSync('/home/fbnode/uploads/coinQueens1');
-                if(!k)
-                 fs.mkdir('/home/fbnode/uploads/coinQueens1',(err,path)=>{
-                if(err){
-                    console.log(err)
-                }
-                else{
-                    console.log(path)
-                }
-                })
-                cb(null,'/home/fbnode/uploads/coinQueens1')
+    destination:'uploads'
+        //  var k = fs.existsSync('/home/fbnode/uploads/coinQueens1');
+        //         if(!k)
+        //          fs.mkdir('/home/fbnode/uploads/coinQueens1',(err,path)=>{
+        //         if(err){
+        //             console.log(err)
+        //         }
+        //         else{
+        //             console.log(path)
+        //         }
+        //         })
+        //         cb(null,'/home/fbnode/uploads/coinQueens1')
 
-        cb(null,'/home/fbnode/uploads/coinQueens1')
-    },
+        // cb(null,'/home/fbnode/uploads/coinQueens1')
+
+
+    ,
     filename:(req,file,cb)=>{
         cb(null, file.originalname)
     },
