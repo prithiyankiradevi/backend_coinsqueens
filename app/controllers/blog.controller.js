@@ -25,9 +25,8 @@ const createBlog = async (req, res) => {
 const getBlogById = async (req, res) => {
   try {
     if (req.params.id.length == 24) {
-      const data = await blogController.blogSchema.aggregate([
-        { $match: { $and: [{ _id: req.params.id }, { deleteFlag: false }] } },
-      ]);
+      // const resul=await blogController.blogSchema.aggregate([{}])
+      let data = await blogController.blogSchema.find({_id:req.params.id,deleteFlag:"false"});
       if (data != null) {
         res.status(200).send({ data: data });
       } else {
