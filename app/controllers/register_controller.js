@@ -80,7 +80,7 @@ const createBlogImage = (req, res) => {
 };
 
 const createUploadFiles = (req, res) => {
-  try {
+  // try {
     if (req.file && req.headers.authorization) {
       // req.body.UploadFiles = `http://192.168.0.112:8099/uploads/$req.file.filename}`;
       req.body.blogImage = `https://nodejs-new-coins.herokuapp.com/uploads/${req.file.filename}`;
@@ -95,9 +95,9 @@ const createUploadFiles = (req, res) => {
     } else {
       res.status(302).send({ message: "please insert uploadfiles/token" });
     }
-  } catch (e) {
-    res.status(500).send("internal server error");
-  }
+  // } catch (e) {
+  //   res.status(500).send("internal server error");
+  // }
 };
 
 module.exports = {
