@@ -3,3 +3,4 @@ module.exports={
     url:'mongodb+srv://coinsqueens:coinsqueens001234@cluster0.zycyh.mongodb.net/coinsQueens1?retryWrites=true&w=majority'
     // url:'mongodb+srv://coins:coins@cluster0.lugm1.mongodb.net/coinsQueens1?retryWrites=true&w=majority'
 }
+

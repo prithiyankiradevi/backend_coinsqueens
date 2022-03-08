@@ -1,56 +1,69 @@
 const ipController = require("../model/register_model");
 const blogController = require("../model/blog.model");
 const pagination = require("../middleware/pagination");
-const req = require("express/lib/request");
-const { cbrt } = require("math");
+const { read } = require("fs");
 
 const getById = (req, res) => {
   try {
-    blogController.blogSchema.findById(
-      { _id: req.params.id, deleteFlag: false },
-      (err, data) => {
-        if (err) {
-          throw err;
-        } else {
-          res.status(200).send({ data: data });
-        }
-      }
-    );
-  } catch (e) {
-    res.status(500).send("internal server error");
-  }
-};
-
-const getAllUserBlog = (req, res) => {
-  try {
-    blogController.blogSchema.find({ deleteFlag: false }, (err, data) => {
-      if (data) {
-        const arr = [];
-        for (var i = 0; i < data.length; i++) {
-          if (data[i].publish === "publish") {
-            arr.push(data[i]);
+    if (req.params.id.length == 24) {
+      blogController.blogSchema.findById(
+        { _id: req.params.id, deleteFlag: "false" },
+        (err, data) => {
+          if (err) {
+            throw err;
+          } else {
+            if (data != null) {
+              res.status(200).send({ data: data });
+            } else {
+              res.status(302).send({ data: [] });
+            }
           }
         }
-        const a = pagination.paginated(arr, 10, req, res);
-        res.status(200).send({ data: a });
-      } else {
-        res.status(400).send({ message: "your data is already deleted" });
-      }
-    });
+      );
+    } else {
+      res.status(200).send({ message: "please provide a valid id" });
+    }
   } catch (e) {
     res.status(500).send("internal server error");
   }
 };
 
-const getAllCategory = (req, res) => {
+const getAllUserBlog = async (req, res) => {
   try {
-    blogController.categorySchema.find({ deleteFlag: false }, (err, data) => {
-      if (err) {
-        throw err;
-      } else {
-        res.status(200).send({ data: data });
+    const data = await blogController.blogSchema.aggregate([
+      { $match: { deleteFlag: "false" } },
+    ]);
+    if (data.length != 0) {
+      const arr = [];
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].publish === "publish") {
+          arr.push(data[i]);
+        }
       }
-    });
+      const a = pagination.paginated(arr, 10, req, res);
+      if (a.length != 0) {
+        res.status(200).send({ data: a });
+      } else {
+        res.status(302).send({ data: [] });
+      }
+    } else {
+      res.status(302).send({ data: [] });
+    }
+  } catch (e) {
+    res.status(500).send("internal server error");
+  }
+};
+
+const getAllCategory = async (req, res) => {
+  try {
+    const data = await blogController.categorySchema.aggregate([
+      { $match: { deleteFlag: "false" } },
+    ]);
+    if (data.length != 0) {
+      res.status(200).send({ data: data });
+    } else {
+      res.status(302).send({ data: [] });
+    }
   } catch (e) {
     res.status(500).send("internal server error");
   }
@@ -58,12 +71,15 @@ const getAllCategory = (req, res) => {
 
 const createIp = async (req, res) => {
   try {
-    ipController.ipAddress.create(req.body, (err, data) => {
+    let data={
+      ipAddress:req.body.ipAddress
+    }
+    ipController.ipAddress.create(data, (err, data) => {
       if (err) {
         res.status(200).send({ message: "ip does not create properly" });
       } else {
         blogController.blogSchema.findOne(
-          { _id: req.body.id, deleteFlag: "false" },
+          {_id:req.body.id,deleteFlag: "false" },
           (err, data) => {
             if (data.ip.includes(req.body.ipAddress)) {
               res.status(200).send({ message: "ip already exists" });
@@ -101,16 +117,16 @@ const createIp = async (req, res) => {
   }
 };
 
-const getIpAddress = (req, res) => {
+const getIpAddress = async (req, res) => {
   try {
-    ipController.ipAddress.find({ deleteFlag: "false" }, (err, data) => {
-      if (err) {
-        throw err;
-      } else {
-        const length = data.length;
+      const data = await ipController.ipAddress.aggregate([
+        { $match: { deleteFlag: "false" } },
+      ]);
+      if (data.length != 0) {
         res.status(200).send({ data: data.length });
+      } else {
+        res.status(302).send({ data: [] });
       }
-    });
   } catch (e) {
     res.status(500).send("internal server error");
   }
@@ -123,14 +139,17 @@ const getBlogUrl = (req, res) => {
       if (err) {
         throw err;
       } else {
-        res.status(200).send({ data: data });
+        if (data != null) {
+          res.status(200).send({ data: data });
+        } else {
+          res.status(200).send({ data: [] });
+        }
       }
     }
   );
 };
 
 const textSearch = async (req, res) => {
-
   pagination.pagination(
     blogController.blogSchema,
     10,

@@ -20,3 +20,5 @@ router.delete('/category/delete/:id',blogController.deleteCategory)
 
 
 module.exports=router
+
+

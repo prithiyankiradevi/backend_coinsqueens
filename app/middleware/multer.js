@@ -4,7 +4,6 @@ const fs=require('fs')
 const storage=multer.diskStorage ({
     destination:(req,res,cb)=>{
          var k = fs.existsSync('/home/fbnode/uploads/coinQueens1');
-            console.log(k);
                 if(!k)
                  fs.mkdir('/home/fbnode/uploads/coinQueens1',(err,path)=>{
                 if(err){
