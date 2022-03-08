@@ -63,7 +63,8 @@ const createBlogImage = (req, res) => {
 
     if (req.file && token) {
       req.body.userName = token;
-      req.body.blogImage = `http://192.168.0.112:8099/uploads/${req.file.filename}`;
+      // req.body.blogImage = `http://192.168.0.112:8099/uploads/${req.file.filename}`;
+      req.body.blogImage = `https://nodejs-new-coins.herokuapp.com/uploads/${req.file.filename}`;
       register.blogImage.create(req.body, (err, data) => {
         if (err) {
           throw err;
