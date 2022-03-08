@@ -62,7 +62,7 @@ const createBlogImage = (req, res) => {
   try {
     if (req.file && token) {
       req.body.userName = token;
-      req.body.blogImage = `https://nodejs-new-coins.herokuapp.com/uploads/${req.file.filename}`;
+      req.body.blogImage = `https://api.coinsqueens.com/uploads/${req.file.filename}`;
       register.blogImage.create(req.body, (err, data) => {
         if (err) {
           throw err;
@@ -81,7 +81,7 @@ const createBlogImage = (req, res) => {
 const createUploadFiles = (req, res) => {
   try {
     if (req.file) {
-      req.body.UploadFiles = `https://nodejs-new-coins.herokuapp.com/uploads/${req.file.filename}`;
+      req.body.UploadFiles = `https://api.coinsqueens.com/uploads/${req.file.filename}`;
 
       register.uploadFiles.create(req.body, (err, data) => {
         if (err) {
