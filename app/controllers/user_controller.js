@@ -149,6 +149,24 @@ const getBlogUrl = (req, res) => {
   );
 };
 
+const getBlogByTagName=async(req,res)=>{
+  try{
+    if(req.params.tagName){
+      const data=await blogController.blogSchema.aggregate([{$match:{$and:[{"tags":{"$in":[req.params.tagName]}},{"deleteFlag":"false"}]}},{$match:{"publish":"publish"}}])
+      if(data){
+        const usePagination=pagination.paginated(data,10,req,res)
+        res.status(200).send({success:'true',message:'fetch data successfully',usePagination})
+      }else{
+        res.status(200).send({success:'false',message:'failed',data:[]})
+      }
+    }else{
+      res.status(400).send({success:"false",message:'failed',data:[]})
+    }
+  }catch(e){
+    res.status(500).send({message:'internal server error'})
+  }
+}
+
 const textSearch = async (req, res) => {
   pagination.pagination(
     blogController.blogSchema,
@@ -166,5 +184,6 @@ module.exports = {
   createIp,
   getIpAddress,
   getBlogUrl,
+  getBlogByTagName,
   textSearch,
 };
