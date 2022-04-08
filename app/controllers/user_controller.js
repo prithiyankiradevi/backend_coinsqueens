@@ -151,11 +151,16 @@ const getBlogUrl = (req, res) => {
 
 const getBlogByTagName=async(req,res)=>{
   try{
-    if(req.params.tagName){
-      const data=await blogController.blogSchema.aggregate([{$match:{$and:[{"tags":{"$in":[req.params.tagName]}},{"deleteFlag":"false"}]}},{$match:{"publish":"publish"}}])
+    if(req.body.tagName){
+      console.log(typeof(req.body.tagName))
+      const a=req.body.tagName.replaceAll('-',' ')
+      console.log(a)
+      const data=await blogController.blogSchema.aggregate([{$match:{$and:[{"tags":{"$in":[a]}},{"deleteFlag":"false"}]}},{$match:{"publish":"publish"}}])
+      // console.log(data)
       if(data){
-        const usePagination=pagination.paginated(data,10,req,res)
-        res.status(200).send({success:'true',message:'fetch data successfully',usePagination})
+        // const usePagination=pagination.paginated(data,10,req,res)
+        // console.log(usePagination)
+        res.status(200).send({success:'true',message:'fetch data successfully',data})
       }else{
         res.status(200).send({success:'false',message:'failed',data:[]})
       }

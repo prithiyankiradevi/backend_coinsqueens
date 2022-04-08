@@ -5,7 +5,7 @@ const blogController=require('../controllers/blog.controller')
 router.get('/getById/:id',userController.getById)
 router.get('/getAllBlog',userController.getAllUserBlog)
 router.get('/getAllCategory',userController.getAllCategory)
-router.get('/tag/getByTagName/:tagName',userController.getBlogByTagName)
+router.post('/tag/getByTagName',userController.getBlogByTagName)
 
 //
 
