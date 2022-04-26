@@ -50,4 +50,7 @@ app.use('/uploads',express.static('uploads'))
 
 // set port, listen for requests
 // const PORT = process.env.PORT || 8080;
-app.listen()
+// app.listen()
+app.listen(process.env.PORT,()=>{
+  console.log(`server is listening on the ${process.env.PORT}`)
+})

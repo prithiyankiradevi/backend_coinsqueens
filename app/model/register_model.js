@@ -24,6 +24,7 @@ const blogsImage = mongoose.Schema({
     }
 })
 
+
 const uploadImage = mongoose.Schema({
     UploadFiles: String,
     deleteFlag: {
@@ -35,6 +36,7 @@ const uploadImage = mongoose.Schema({
 
 const ipSchema = mongoose.Schema({
     ipAddress: String,
+    // id:String,
     deleteFlag: {
         type: String,
         default: 'false'

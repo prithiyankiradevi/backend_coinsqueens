@@ -43,6 +43,7 @@ const getBlogById = async (req, res) => {
 };
 
 const getAllBlog = async (req, res) => {
+  // console.log('hoihikhug')
   try {
     const token = req.headers.authorization;
     if (token != undefined) {

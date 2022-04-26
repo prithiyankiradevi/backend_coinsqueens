@@ -29,10 +29,12 @@ const getById = (req, res) => {
 };
 
 const getAllUserBlog = async (req, res) => {
+  console.log('kjhiuohkljhnihnio')
   try {
     const data = await blogController.blogSchema.aggregate([
       { $match: { deleteFlag: "false" } },
     ]);
+    console.log(data)
     if (data.length != 0) {
       const arr = [];
       for (var i = 0; i < data.length; i++) {
@@ -40,7 +42,9 @@ const getAllUserBlog = async (req, res) => {
           arr.push(data[i]);
         }
       }
+      console.log(arr)
       const a = pagination.paginated(arr, 10, req, res);
+      console.log(a)
       if (a.length != 0) {
         res.status(200).send({ data: a });
       } else {
@@ -75,12 +79,15 @@ const createIp = async (req, res) => {
       ipAddress:req.body.ipAddress
     }
     ipController.ipAddress.create(data, (err, data) => {
+
       if (err) {
         res.status(200).send({ message: "ip does not create properly" });
       } else {
+        // console.log('line 86',req.body.id)
         blogController.blogSchema.findOne(
           {_id:req.body.id,deleteFlag: "false" },
           (err, data) => {
+            // console.log('line line 100',data)
             if (data.ip.includes(req.body.ipAddress)) {
               res.status(200).send({ message: "ip already exists" });
             } else {
@@ -90,6 +97,7 @@ const createIp = async (req, res) => {
                 data,
                 { new: true },
                 (err, result) => {
+                  // console.log('line 100',result)
                   if (result) {
                     req.body.blogId = result._id;
                     req.body.updatedAt = Date.now();
